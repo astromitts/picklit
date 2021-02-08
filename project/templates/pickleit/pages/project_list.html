@@ -1,0 +1,69 @@
+{% extends 'pickleit/project_base.html' %}
+
+{% block page_content %}
+<div class="row">
+	<div class="col">
+		<h1>Projects</h1>
+	</div>	
+</div>
+
+{% for project in projects %}
+	<div class="row">
+		<div class="col-12">
+			<a href="{% url 'project_detail' project_pk=project.pk %}">{{project.name}}</a>
+		</div>	
+	</div>
+{% endfor %}
+
+
+<form method="POST" action="{% url 'project_create' %}">
+	<div class="row">
+		<div class="col-2">
+			Create a project:
+		</div>
+		<div class="col">
+			{% csrf_token %}
+			{{project_form.name}}
+		</div>
+		<div class="col-2">
+			<input type="submit" value="Submit" class="btn btn-primary" />
+		</div>
+	</div>
+</form>
+
+<div class="row">
+	<div class="col">
+		<h1>Personas</h1>
+	</div>	
+</div>
+
+{% for persona in personas %}
+	<div class="row">
+		<div class="col-4">
+			<a href="">{{persona.name}}</a>
+		</div>	
+		<div class="col-4">
+			{{persona.description}}
+		</div>	
+	</div>
+{% endfor %}
+
+
+<form method="POST" action="{% url 'persona_create' %}">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-2">
+			Create a persona:
+		</div>
+		<div class="col">
+			{{persona_form.name}}
+		</div>
+		<div class="col">
+			{{persona_form.description}}
+		</div>
+		<div class="col-2">
+			<input type="submit" value="Submit" class="btn btn-primary" />
+		</div>
+	</div>
+</form>
+{% endblock %}

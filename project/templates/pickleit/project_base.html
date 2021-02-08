@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="author" content="Bo Morin">
+	<title>
+		Pickle.it{% if page_title %} | {{PAGE_TITLE}}{% endif %}
+	</title>
+	<link rel="shortcut icon" href="{% static 'site-images/favicon.ico' %}" />
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+	<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href= 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" > </script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" > </script>
+	<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+	{% comment %}
+	<script src="{% static 'js/baseUtils.js' %}"></script>
+	<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+	<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+	{% endcomment %}
+	{% block extra_js %}{% endblock %}
+	<link href="{% static 'app.css' %}" rel="stylesheet">
+	{% block extra_css %}{% endblock %}
+</head>
+
+<body>
+	{% block header_nav %}
+		<nav class="navbar navbar-expand-sm bg-light navbar-light">
+			<div class="container">
+				<a class="navbar-brand float-left" href="{% url 'project_list' %}">Pickle.it
+				</a>
+			</div>
+		</nav>
+	{% endblock %}
+	{% if breadcrumbs %}
+		<div class="container">
+			<nav aria-label="breadcrumb">
+			  <ol class="breadcrumb">
+			  	{% for title, link in breadcrumbs %}
+					{% if not forloop.last %}
+						<li class="breadcrumb-item"><a href="{{link}}">{{title}}</a></li>
+					{% else %}
+						<li class="breadcrumb-item active">{{title}}</li>
+					{% endif %}
+				{% endfor %}
+			  </ol>
+			</nav>
+		</div>
+	{% endif %}
+	<div class="container">
+		<div id="main-content">
+		{% block messages %}
+			{% if messages %}
+				<div class="row">
+					<div class="col">
+					    {% for message in messages %}
+					    <div class="alert alert-{% if message.level_tag == 'error'%}danger{% else %}{{message.level_tag}}{% endif %}">
+						 	{{message|safe}}
+						</div>
+					    {% endfor %}
+					</div>
+				</div>
+				{% endif %}
+			{% endblock %}
+			{% block page_content %}{% endblock %}
+			{% block email_preview %}
+				{% if show_email %}
+					{% include 'usermanager/emails/app_email_preview.html' with email=show_email %}
+				{% endif %}
+			{% endblock %}
+		</div>
+
+	</div>
+	<div class="footer">
+		<div class="row">
+			<div class="col"></div>
+			<div class="col">
+
+				{% comment %}
+				<a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+				<br />
+				<a href="{% url 'eula' %}">End User License Agreement</a>
+				{% endcomment %}
+			</div>
+			<div class="col">
+				{% comment %}
+				<div>Additional resources:</div>
+				<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">www.flaticon.com</a></div>
+				<div>Loading graphic by <a href="https://loading.io/" target="_blank">loading.io</a></div>
+				{% endcomment %}
+			</div>
+			<div class="col"></div>
+		</div>
+	</div>
+</body>

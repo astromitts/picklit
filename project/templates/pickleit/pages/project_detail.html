@@ -1,0 +1,52 @@
+{% extends 'pickleit/project_base.html' %}
+
+{% block page_content %}
+<div class="row">
+	<div class="col">
+		<h1>{{project.name}}</h1>
+	</div>	
+</div>
+
+<div class="row">
+	<div class="col">
+		<h2><a href="{% url 'table_def_list' project_pk=project.pk %}">Test Data</a></h2>
+	</div>	
+</div>
+
+<div class="row">
+	<div class="col">
+		<h2>Features</h2>
+	</div>	
+</div>
+
+{% for feature in project.feature_set.all %}
+	<div class="row repeating-section_small">
+		<div class="col-12">
+			<div>
+				<a href="{% url 'feature_detail' project_pk=project.pk feature_pk=feature.pk %}">{{feature.name}}</a>
+			</div>
+			<div>{{feature.description}}</div>
+		</div>	
+	</div>
+{% endfor %}
+
+
+<form method="POST" action="{% url 'feature_create' project_pk=project.pk %}">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-2">
+			Add a feature:
+		</div>
+		<div class="col">
+			{{form.name}}
+		</div>
+		<div class="col">
+			{{form.description}}
+		</div>
+		<div class="col-2">
+			{{form.project}}
+			<input type="submit" value="Submit" class="btn btn-primary" />
+		</div>
+	</div>
+</form>
+{% endblock %}

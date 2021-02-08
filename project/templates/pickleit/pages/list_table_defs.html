@@ -1,0 +1,47 @@
+{% extends 'pickleit/project_base.html' %}
+
+{% block page_content %}
+<div class="row repeating-section_small">
+	<div class="col"><h2>Table Definitions</h2></div>
+	<div class="col">
+		<a href="{% url 'table_def_create' project_pk=project.pk %}" class="btn btn-success float-right">Create new data table</a>
+	</div>
+</div>
+{% for table in project.datatabledefinition_set.all %}
+	<div class="row repeating-section_small">
+		<div class="col">
+			<div class="text-bold">
+			<a href="{% url 'table_def_edit' project_pk=project.pk table_pk=table.pk %}">
+				{{table.name}}</a>
+			</div>
+		</div>
+		<div class="col">
+			<form method="POST" action="{% url 'delete_item' project_pk=project.pk itemtype='table' %}?returnurl={{request.path}}">
+			{% csrf_token %}
+			<input type="hidden" name="itempk" value="{{table.pk}}">
+			<input type="submit"  value="Delete Table" class="btn btn btn-sm btn-danger float-right"/>
+		</form>
+		</div>
+
+		<div class="col-12">
+			<table class="table table-bordered">
+				<tr>
+					{% for h in table.header %}
+						<th>
+							<span class="text-bold">{{h}}</span>
+						</th>
+					{% endfor %}
+				</tr>
+				{% for row in table.rows %}
+					<tr>
+						{% for r in row %}
+							<td>{{r}}</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+{% endfor %}
+
+{% endblock %}

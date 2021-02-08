@@ -1,0 +1,140 @@
+{% extends 'pickleit/project_base.html' %}
+{% load storytags %}
+
+{% block page_content %}
+<div class="row page-header">
+	<div class="col">
+		<h1><a href="{% url 'feature_detail' project_pk=project.pk feature_pk=feature.pk %}">{{feature.name}}</a></h1>
+	</div>	
+	<div class="col">
+		<form method="POST" action="{% url 'delete_item' project_pk=project.pk itemtype='scenario' %}?returnurl={{feature_url}}">
+		{% csrf_token %}
+		<input type="hidden" name="itempk" value="{{scenario.pk}}">
+		<input type="submit" name="delete-step" value="Delete Scenario" class="btn btn btn-sm btn-danger float-right"/>
+		</form>
+	</div>
+</div>
+
+<div class="row page-header page-header_subheader">
+	<div class="col">
+		<h3>Feature: {{feature.description}}</h3>
+	</div>	
+</div>
+
+<div class="row page-header page-header_subheader">
+	<div class="col">
+		<h2>Scenario</h2>
+	</div>	
+</div>
+<form method="POST" action="{% url 'scenario_edit' project_pk=project.pk feature_pk=feature.pk scenario_pk=scenario.pk %}">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col">
+			{{edit_form.persona}}
+		</div>	
+		<div class="col">
+			{{edit_form.title}}
+		</div>	
+		<div class="col">
+			{{edit_form.feature}}
+			<input type="submit" class="btn btn-sm btn-success float-right" value="Update" />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			{{edit_form.description}}
+		</div>
+	</div>
+</form>
+
+	<div class="row">
+		<div class="as-table">
+			<div class="as-row">
+				<div class="as-cell as-cell_xsmall"></div>
+				<div class="as-cell as-cell_xsmall"></div>
+				<div class="as-cell as-cell_med">Given</div>
+				<div class="as-cell as-cell_lg">I am a {{scenario.persona}}</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="as-table">
+			{% for step in scenario.step_set.all %}
+			<div class="as-row">
+				<div class="as-cell as-cell_xsmall">
+					{% if not forloop.first %}
+					<form method="POST" action="{% url 'shift_step' project_pk=project.pk feature_pk=feature.pk scenario_pk=scenario.pk step_pk=step.pk direction='up' %}">
+						{% csrf_token %}
+						<input type="submit" class="btn btn-xsm btn-info" value="&#8593;">
+					</form>
+					{% endif %}
+				</div>
+				<div class="as-cell as-cell_xsmall">
+					{% if not forloop.last %}
+					<form method="POST" action="{% url 'shift_step' project_pk=project.pk feature_pk=feature.pk scenario_pk=scenario.pk step_pk=step.pk direction='down' %}">
+						{% csrf_token %}
+						<input type="submit" class="btn btn-xsm btn-info" value="&#8595;">
+					</form>
+					{% endif %}
+				</div>
+				{% with step|get_step_edit_form as step_form %}
+				<form method="POST" action="{% url 'edit_step' project_pk=project.pk feature_pk=feature.pk scenario_pk=scenario.pk  step_pk=step.pk %}">
+					<div class="as-cell as-cell_med">
+						{% csrf_token %}
+						{{step_form.scenario}}
+						{{step_form.starter}}
+					</div>
+					<div class="as-cell as-cell_lg">{{step_form.action}}</div>
+					<div class="as-cell  as-cell_lg">
+						{{step_form.body}}<br />
+						attached table:<br />
+						{{step_form.table}}
+					</div>
+					<div class="as-cell">
+						<input type="submit" value="update" class="btn btn btn-sm btn-info float-right"/>
+					</div>
+				</form>
+				{% endwith %}
+				<div class="as-cell">
+					<form method="POST" action="{% url 'delete_item' project_pk=project.pk itemtype='step' %}?returnurl={{request.path}}">
+						{% csrf_token %}
+						<input type="hidden" name="itempk" value="{{step.pk}}">
+						<input type="submit" name="delete-step" value="Delete Step" class="btn btn btn-sm btn-danger float-right"/>
+					</form>
+				</div>	
+			</div>
+			{% endfor %}
+		</div>	
+	</div>
+
+	{% with scenario|get_step_form as step_form %}
+	<form method="POST" action="{% url 'create_step' project_pk=project.pk feature_pk=feature.pk scenario_pk=scenario.pk scenario_pk=scenario.pk %}">
+		{% csrf_token %}
+		<div class="row">
+			<div class="as-table">
+				<div class="as-row">
+					<div class="as-cell as-cell_xsmall"></div>
+					<div class="as-cell as-cell_xsmall"></div>
+					<div class="as-cell as-cell_med">{{step_form.starter}}</div>
+					<div class="as-cell as-cell_lg">{{step_form.action}}</div>
+					<div class="as-cell as-cell_lg">{{step_form.body}}</div>
+					<div class="as-cell">
+						{{step_form.scenario}}
+					</div>
+				</div>
+				<div class="as-row">
+					<div class="as-cell as-cell_xsmall"></div>
+					<div class="as-cell as-cell_xsmall"></div>
+					<div class="as-cell as-cell_med"></div>
+					<div class="as-cell as-cell_lg">Attach a data table: </div>
+					<div class="as-cell as-cell_lg">{{step_form.table}}</div>
+					<div class="as-cell">
+						{{step_form.scenario}}
+						<input type="submit" value="Add Step" class="btn btn-success btn-sm float-right" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	{% endwith %}
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'pickleit/project_base.html' %}
+{% load storytags %}
+
+{% block page_content %}
+<div class="row page-header">
+	<div class="col">
+		<h1>{{feature.name}}</h1>
+	</div>	
+	<div class="col">
+		<form method="POST" action="{% url 'delete_item' project_pk=project.pk itemtype='feature' %}?returnurl={{project_url}}">
+			{% csrf_token %}
+			<input type="hidden" name="itempk" value="{{feature.pk}}">
+			<input type="submit" name="delete-feature" value="Delete Feature" class="btn btn btn-sm btn-danger float-right"/>
+		</form>
+	</div>
+</div>
+
+<div class="row page-header page-header_subheader">
+	<div class="col">
+		<h2>Feature Scenarios</h2>
+	</div>	
+</div>
+
+{% for scenario in feature.scenario_set.all %}
+
+	<div class="row">
+		<div class="col">
+
+			<div class="callout callout_mint text-bold">
+				{{scenario.persona}} can {{scenario.title}}
+			</div>
+		</div>
+		<div class="col-1">
+			<a href="{% url 'scenario_edit' project_pk=project.pk feature_pk=feature.pk scenario_pk=scenario.pk %}" class="btn btn-sm btn-primary">edit</a>
+		</div>
+	</div>
+	{% if scenario.description %}
+		<div class="row">
+			<div class="col">
+					{{scenario.description}}
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	<div class="row">
+		<div class="col">
+			<div class="callout callout_lavendar">
+				<div class="as-table">
+					<div class="as-row border-bottom border-bottom_dashed">
+						<div class="as-cell as-cell_small">Given</div>
+						<div class="as-cell">I am a {{scenario.persona}}</div>
+					</div>
+					{% for step in scenario.step_set.all %}
+						<div class="as-row">
+							<div class="as-cell as-cell_small">{{step.starter}}</div>
+							<div class="as-cell">{{step.action}} {{step.body}}</div>
+						</div>
+							{% if step.table %}
+							<div class="as-row">
+								<div class="as-cell as-cell_small">
+								</div>
+								<div class="as-cell">
+									<table class="table table-bordered">
+									<tr>
+										{% for h in step.table.header %}
+											<th>
+												<span class="text-bold">{{h}}</span>
+											</th>
+										{% endfor %}
+									</tr>
+									{% for row in step.table.rows %}
+										<tr>
+											{% for r in row %}
+												<td>{{r}}</td>
+											{% endfor %}
+										</tr>
+									{% endfor %}
+								</table>
+								</div>
+							</div>
+							{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>	
+	</div>
+	<hr />
+{% endfor %}
+
+
+<div class="row">
+	<div class="col">
+		<h3>New Scenario</h3>
+	</div>
+</div>
+
+<form method="POST" action="{% url 'create_scenario' project_pk=feature.project.pk feature_pk=feature.pk %}">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col">
+			{{form.persona}}  
+		</div>
+		<div class="col-1">can</div>
+		<div class="col">
+			{{form.title}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			{{form.description}}
+		</div>
+		<div class="col-2">
+			{{form.feature}}
+			<input type="submit" value="Submit" class="btn btn-primary" />
+		</div>
+	</div>
+</form>
+{% endblock %}
