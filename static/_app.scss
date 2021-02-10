@@ -1,0 +1,85 @@
+$mint: #d8f9f0;
+$lavendar: #e6e6f9;
+
+$body-color: #FFFFFF;
+
+ol.breadcrumb {
+	background-color: $body-color;
+	li a {
+		color: #000000;
+		font-weight: bold;
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
+
+h1 {
+	font-size: 1.75rem;
+}
+
+h2 {
+	font-size: 1.25rem;
+}
+.text {
+	&-bold {
+		font-weight: bold;
+	}
+}
+.page-header {
+	margin-bottom: 1rem;
+}
+
+.repeating-section {
+	margin-bottom: 5rem;
+	&_small {
+		margin-bottom: 2.5rem;
+	}
+	&_title {
+		font-weight: bold;
+	}
+}
+
+.td {
+	&-small {
+		width: 5rem;
+	}
+}
+
+.as-table {
+	display: table;
+	.as-row {
+		display: table-row;
+	}
+	.as-cell {
+		display: table-cell;
+		&_lg {
+			width: 30rem;
+		}
+		&_med {
+			width: 7rem;
+		}
+		&_small {
+			width: 5rem;
+		}
+		&_xsmall {
+			width: 3rem;
+		}
+	}
+}
+.border-bottom {
+	border-bottom: 1px solid black;
+}
+
+.callout {
+	border: 1px solid;
+	border-radius: 5px;
+	padding: 8px;
+	margin: .7rem 0rem 0rem;
+	&_mint {
+		background-color: $mint;
+	}
+	&_lavendar {
+		background-color: $lavendar;
+	}
+}

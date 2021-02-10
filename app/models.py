@@ -1,5 +1,6 @@
 from copy import copy
 from django.db import models
+from django.urls import reverse
 
 
 class Project(models.Model):
@@ -13,6 +14,15 @@ class Feature(models.Model):
 
 	class Meta:
 		unique_together = ['project', 'name']
+
+	@property
+	def api_path(self):
+		return reverse(
+			'api_feature_dashboard', kwargs={
+				'project_pk': self.project.pk,
+				'feature_pk': self.pk,
+			}
+		)
 
 
 class Persona(models.Model):
@@ -39,6 +49,30 @@ class Scenario(models.Model):
 	description = models.TextField(blank=True, null=True)
 	feature = models.ForeignKey(Feature, on_delete=models.CASCADE)
 	persona = models.ForeignKey(Persona, null=True, on_delete=models.SET_NULL)
+
+	@property
+	def persona_display(self):
+		return self.persona.name
+
+	@property
+	def api_path(self):
+		return reverse(
+			'api_scenario_dashboard', kwargs={
+				'project_pk': self.feature.project.pk,
+				'feature_pk': self.feature.pk,
+				'scenario_pk': self.pk,
+			}
+		)
+
+	@property
+	def edit_path(self):
+		return reverse(
+			'scenario_edit', kwargs={
+				'project_pk': self.feature.project.pk,
+				'feature_pk': self.feature.pk,
+				'scenario_pk': self.pk,
+			}
+		)
 
 
 class ActionDefinition(models.Model):
@@ -88,6 +122,10 @@ class Step(models.Model):
 	class Meta:
 		ordering = ['order']
 		unique_together = ['scenario', 'order']
+
+	@property
+	def action_display(self):
+		return self.action.action
 
 	def shift_up(self):
 		original_order = copy(self.order)

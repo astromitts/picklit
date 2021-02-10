@@ -1,0 +1,81 @@
+ol.breadcrumb {
+  background-color: #FFFFFF;
+}
+ol.breadcrumb li a {
+  color: #000000;
+  font-weight: bold;
+}
+ol.breadcrumb li a:hover {
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.page-header {
+  margin-bottom: 1rem;
+}
+
+.repeating-section {
+  margin-bottom: 5rem;
+}
+.repeating-section_small {
+  margin-bottom: 2.5rem;
+}
+.repeating-section_title {
+  font-weight: bold;
+}
+
+.td-small {
+  width: 5rem;
+}
+
+.as-table {
+  display: table;
+}
+.as-table .as-row {
+  display: table-row;
+}
+.as-table .as-cell {
+  display: table-cell;
+}
+.as-table .as-cell_lg {
+  width: 30rem;
+}
+.as-table .as-cell_med {
+  width: 7rem;
+}
+.as-table .as-cell_small {
+  width: 5rem;
+}
+.as-table .as-cell_xsmall {
+  width: 3rem;
+}
+
+.border-bottom {
+  border-bottom: 1px solid black;
+}
+
+.callout {
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 8px;
+  margin: 0.7rem 0rem 0rem;
+}
+.callout_mint {
+  background-color: #d8f9f0;
+}
+.callout_lavendar {
+  background-color: #e6e6f9;
+}
+
+/*# sourceMappingURL=app.css.map */
